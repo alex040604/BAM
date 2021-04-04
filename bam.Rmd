@@ -1,0 +1,42 @@
+---
+title: "BAM1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+dados <- read.csv2('dados.csv') %>% 
+  mutate(ano = as_factor(nr_ano_referencia),
+         mes = as_factor(nr_mes_referencia),
+         pax = as.numeric(nr_passag_pagos),
+         pax_est = nr_passag_pagos_est)
+
+colnames(dados)
+
+str(dados)
+```
+
+# Gráfico Pax Nac
+
+```{r}
+pax_dom <- dados %>% 
+  filter(ds_natureza_etapa == "DOMÉSTICA",
+         linha == "Mista") %>% 
+  select(ano, mes, pax, pax_est)
+
+str(pax_dom)
+
+pax_dom %>% 
+  group_by(ano, mes) %>% 
+  summarize(pax = sum(pax),
+            paxe = sum(pax_est)) %>% 
+  ggplot(aes(mes, pax, group = ano, color = ano)) +
+  geom_line() +
+  geom_line(aes(mes, pax_est))
