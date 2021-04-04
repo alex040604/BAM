@@ -23,7 +23,7 @@ colnames(dados)
 str(dados)
 ```
 
-# Gráfico Pax Nac
+# Gráfico Pax Dom
 
 ```{r}
 pax_dom <- dados %>% 
